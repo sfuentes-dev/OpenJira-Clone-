@@ -17,6 +17,7 @@ export const EntryList: FC<Props> = ({ status }) => {
 
   const entriesByStatus = useMemo(
     () => entries.filter((entry) => entry.status === status),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     [entries]
   );
 
