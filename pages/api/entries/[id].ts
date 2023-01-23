@@ -26,6 +26,9 @@ export default function handler(
     case 'GET':
       return getEntry(req, res);
 
+    case 'DELETE':
+      return deleteEntry(req, res);
+
     default:
       return res.status(400).json({ message: 'Invalid Method' });
   }
@@ -75,4 +78,18 @@ const getEntry = async (req: NextApiRequest, res: NextApiResponse<Data>) => {
   }
 
   return res.status(200).json(entryById);
+};
+
+const deleteEntry = async (req: NextApiRequest, res: NextApiResponse<Data>) => {
+  const { id } = req.query;
+
+  await db.connect();
+  const entryByIdToDelete = await Entry.findByIdAndDelete(id);
+  await db.disconnect();
+
+  if (!entryByIdToDelete) {
+    return res.status(400).json({ message: 'Entry not found' });
+  }
+
+  return res.status(200).json(entryByIdToDelete);
 };

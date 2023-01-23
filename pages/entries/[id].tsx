@@ -27,6 +27,7 @@ import { Entry, EntryStatus } from '../../interfaces';
 
 import { EntriesContext } from '../../context/entries';
 import { dateFunctions } from '@/utils';
+import { useRouter } from 'next/router';
 
 const validStatus: EntryStatus[] = ['pending', 'in-progress', 'finished'];
 
@@ -35,7 +36,8 @@ interface Props {
 }
 
 const EntryPage = ({ entry }: Props) => {
-  const { updateEntry } = useContext(EntriesContext);
+  const { updateEntry, deleteEntry } = useContext(EntriesContext);
+  const router = useRouter();
 
   const [inputValue, setInputValue] = useState(entry.description);
   const [status, setStatus] = useState<EntryStatus>(entry.status);
@@ -63,6 +65,12 @@ const EntryPage = ({ entry }: Props) => {
     };
 
     updateEntry(updatedEntry, true);
+    router.push('/');
+  };
+
+  const onDelete = () => {
+    deleteEntry(entry, true);
+    router.push('/');
   };
 
   return (
@@ -124,6 +132,7 @@ const EntryPage = ({ entry }: Props) => {
         </Grid>
 
         <IconButton
+          onClick={onDelete}
           sx={{
             position: 'fixed',
             bottom: 30,
